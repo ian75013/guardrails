@@ -25,3 +25,4 @@
 - For bug fixes: reproduce with failing test first.
 - Keep deterministic tests for production-critical paths.
 - Treat flaky tests as production risk and fix or quarantine with explicit owner.
+- Run end-to-end tests frequently on critical flows: at least on each PR before merge, after deployment, and before release GO/NOGO.

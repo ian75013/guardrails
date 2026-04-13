@@ -10,6 +10,7 @@
 - Unit test command:
 - Integration test command:
 - E2E test command:
+- E2E cadence (minimum): each PR before merge, post-deploy verification, and release GO/NOGO.
 
 ## Automatic Enforcement Mapping (.guardrails/config.env)
 - REQUIRED_DOCS=

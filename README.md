@@ -58,6 +58,7 @@ bash automation/scripts/apply_to_repos.sh \
 
 ## Minimum Baseline (for any project)
 - Every change has tests.
+- Critical flows are covered by end-to-end tests run frequently (PR, post-deploy, release gates).
 - Every release has rollback.
 - Every incident has technical cause + verified fix.
 - Every new behavior is documented.
