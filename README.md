@@ -62,3 +62,4 @@ bash automation/scripts/apply_to_repos.sh \
 - Every release has rollback.
 - Every incident has technical cause + verified fix.
 - Every new behavior is documented.
+- YAML manifests stay declarative: keep application code in source files (or image builds/file-backed ConfigMaps), not inline blocks.
