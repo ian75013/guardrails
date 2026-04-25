@@ -7,3 +7,4 @@
 - [ ] Rollback note included.
 - [ ] Docs updated for any new behavior.
 - [ ] Security/privacy impact reviewed.
+- [ ] Unnecessary terminals/background test processes were stopped (no hidden parallel runs left active).

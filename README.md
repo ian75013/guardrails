@@ -26,16 +26,41 @@ Use the installer to activate guardrails automatically in any Git repository:
 bash automation/scripts/install_guardrails.sh /path/to/your/repo
 ```
 
+Windows PowerShell:
+
+```powershell
+pwsh -File automation/scripts/install_guardrails.ps1 -TargetRepo C:\path\to\your\repo
+```
+
 What it installs in the target repo:
 - `.guardrails/config.env` (project-specific configuration)
 - `.guardrails/bin/validate_guardrails.sh` (validator)
 - `.git/hooks/pre-commit` entry (automatic local checks)
-- `.github/workflows/guardrails.yml` (CI guardrails on PR/push)
+- `SKILLS.md` (project skill/context baseline)
+- `ROADMAP.md` (delivery phases and checkpoints)
+- `.github/copilot-instructions.md` (chat/coding guardrails)
+- `.github/agents/<repo>-agent.agent.md` (project agent)
+
+CI workflow is optional and disabled by default. Enable it only if needed:
+
+```bash
+bash automation/scripts/install_guardrails.sh --with-ci /path/to/your/repo
+```
+
+```powershell
+pwsh -File automation/scripts/install_guardrails.ps1 -WithCI -TargetRepo C:\path\to\your\repo
+```
 
 To apply on multiple repositories in one command:
 
 ```bash
 bash automation/scripts/apply_to_repos.sh /repo/one /repo/two /repo/three
+```
+
+Windows PowerShell:
+
+```powershell
+pwsh -File automation/scripts/apply_to_repos.ps1 C:\repo\one C:\repo\two C:\repo\three
 ```
 
 General command for this workspace:
