@@ -99,6 +99,26 @@ Edit target repo `.guardrails/config.env`:
 - `TEST_CMD="pytest -q"`
 - `BUILD_CMD="npm run build"`
 
+## Standards de présentation & templates
+
+Guardrails Kit fournit des templates et formats standard pour assurer cohérence et traçabilité:
+
+### Plans d'action
+Pour tout travail substantiel, utilisez **`templates/ACTION_PLAN.template.md`** — format structuré avec:
+- Objectifs clairs
+- Étapes numérotées avec checkboxes
+- Critères de validation explicites
+- Tableau de résultats avant/après
+- État de progression mis à jour
+
+➜ Voir **`FORMAT_GUIDE.md`** pour détails complets et bonnes pratiques.
+
+### Autres templates
+- `ROADMAP.template.md` — roadmap produit/projet
+- `SKILLS.template.md` — documentation de domaine
+- `adr-template.md` — Architecture Decision Records
+- `risk-register-template.md` — registre de risques
+
 ## Notes
 
 - The validator currently checks **staged files**. In CI (where nothing is staged), it exits successfully with "No staged files".

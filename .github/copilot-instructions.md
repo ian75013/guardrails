@@ -6,6 +6,11 @@ Ces règles sont obligatoires pour les tâches sur `guardrails`.
 - Lire `SKILLS.md` et `ROADMAP.md` avant toute tâche substantielle.
 - Aligner le plan sur la phase active de `ROADMAP.md`.
 - Appliquer un workflow obligatoire Plan -> Analyse -> Lecture du code pertinent -> Action pour toute tâche non triviale.
+- **Pour tout plan d'action non trivial, utiliser le format standard** (`templates/ACTION_PLAN.template.md`):
+  - Sections: Objectifs, Étapes, Validation, Résultats attendus, Progression
+  - Checkmarks pour traçabilité (✅, ⏳, ⏹️)
+  - Tableaux pour comparaison avant/après quand applicable
+  - Clair, vérifié, et facile à scanner
 - Avant toute édition, résumer brièvement les hypothèses et vérifier qu'elles correspondent au code observé.
 - Donner des mises à jour courtes et actionnables pendant l'exécution.
 - Privilégier des changements minimaux et vérifiables.
