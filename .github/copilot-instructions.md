@@ -5,6 +5,8 @@ Ces règles sont obligatoires pour les tâches sur `guardrails`.
 ## Guardrails de chat
 - Lire `SKILLS.md` et `ROADMAP.md` avant toute tâche substantielle.
 - Aligner le plan sur la phase active de `ROADMAP.md`.
+- Appliquer un workflow obligatoire Plan -> Analyse -> Lecture du code pertinent -> Action pour toute tâche non triviale.
+- Avant toute édition, résumer brièvement les hypothèses et vérifier qu'elles correspondent au code observé.
 - Donner des mises à jour courtes et actionnables pendant l'exécution.
 - Privilégier des changements minimaux et vérifiables.
 
@@ -17,4 +19,5 @@ Ces règles sont obligatoires pour les tâches sur `guardrails`.
 
 ## Qualité
 - Vérifier les changements (script de validation ciblé, dry-run, ou check équivalent).
+- Réduire les actions spéculatives: privilégier peu d'actions avec forte confiance plutôt que plusieurs essais à faible certitude.
 - Si un blocage persiste, documenter la cause et proposer l'alternative la plus simple.

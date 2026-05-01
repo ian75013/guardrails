@@ -1,90 +1,105 @@
-# Generic Guardrails Kit
+# Guardrails Kit
 
-A reusable guardrails structure for serious software projects.
+Guardrails Kit is a reusable policy + validation bundle for repositories that need enforceable engineering and documentation standards.
 
-## Goals
-- Keep delivery safe, testable, and reversible.
-- Prevent regressions and hidden production risk.
-- Standardize quality gates across teams and repositories.
+## What it installs
 
-## Structure
-- `01-core-principles.md`: non-negotiable engineering principles.
-- `02-engineering-standards.md`: coding, review, and dependency standards.
-- `03-security-privacy.md`: secure-by-default controls.
-- `04-testing-quality-gates.md`: test strategy and merge blockers.
-- `05-release-change-management.md`: release and rollback rules.
-- `06-observability-operations.md`: runtime checks and incident response.
-- `07-documentation-knowledge.md`: mandatory documentation and knowledge transfer.
-- `automation/scripts/`: installation and validation scripts.
-- `checklists/`: copy-paste operational checklists.
-- `templates/`: guardrail templates for project onboarding and CI.
+- `.guardrails/config.env`: repository-level policy toggles
+- `.guardrails/rules/*.md`: policy/rule documents for humans and AI agents
+- `.guardrails/bin/validate_guardrails.sh`: commit/CI validator
+- `.github/workflows/guardrails.yml`: GitHub Actions workflow to enforce guardrails
 
-## Automatic Enforcement
-Use the installer to activate guardrails automatically in any Git repository:
+## How it works
+
+### 1) Policy source of truth
+
+Rules live in `.guardrails/rules/` and are referenced by repository instructions (for example `.github/copilot-instructions.md`).
+
+### 2) Configurable enforcement
+
+`validate_guardrails.sh` loads `.guardrails/config.env` and enforces:
+
+- required documentation files (`REQUIRED_DOCS`)
+- docs update requirement when code files are changed (`REQUIRE_DOC_UPDATE_ON_CODE_CHANGE=1`)
+- optional lint/test/build commands (`LINT_CMD`, `TEST_CMD`, `BUILD_CMD`)
+
+### 3) GitHub Actions gate
+
+Workflow `.github/workflows/guardrails.yml` runs on push/PR and executes the validator script.
+
+## Install into a target repository
 
 ```bash
-bash automation/scripts/install_guardrails.sh /path/to/your/repo
+cd /home/yann/Documents/Github/guardrails-kit
+bash scripts/install_into_repo.sh /absolute/path/to/target-repo
 ```
 
 Windows PowerShell:
 
 ```powershell
-pwsh -File automation/scripts/install_guardrails.ps1 -TargetRepo C:\path\to\your\repo
+cd C:\path\to\guardrails-kit
+pwsh -File scripts/install_into_repo.ps1 C:\absolute\path\to\target-repo
 ```
 
-What it installs in the target repo:
-- `.guardrails/config.env` (project-specific configuration)
-- `.guardrails/bin/validate_guardrails.sh` (validator)
-- `.git/hooks/pre-commit` entry (automatic local checks)
-- `SKILLS.md` (project skill/context baseline)
-- `ROADMAP.md` (delivery phases and checkpoints)
-- `.github/copilot-instructions.md` (chat/coding guardrails)
-- `.github/agents/<repo>-agent.agent.md` (project agent)
-
-CI workflow is optional and disabled by default. Enable it only if needed:
+Optional flags:
 
 ```bash
-bash automation/scripts/install_guardrails.sh --with-ci /path/to/your/repo
+bash scripts/install_into_repo.sh /path/to/repo --without-copilot-instructions
+bash scripts/install_into_repo.sh /path/to/repo --force
+bash scripts/install_into_repo.sh /path/to/repo --project-name "My Project"
 ```
+
+PowerShell optional flags:
 
 ```powershell
-pwsh -File automation/scripts/install_guardrails.ps1 -WithCI -TargetRepo C:\path\to\your\repo
+pwsh -File scripts/install_into_repo.ps1 C:\path\to\repo -WithoutCopilotInstructions
+pwsh -File scripts/install_into_repo.ps1 C:\path\to\repo -Force
+pwsh -File scripts/install_into_repo.ps1 C:\path\to\repo -ProjectName "My Project"
 ```
 
-To apply on multiple repositories in one command:
+## Make it apply to every new Copilot chat (per project)
+
+To enforce guardrails on every new chat in one repository:
+
+1. Install the kit once in that repository (default install now includes Copilot instructions).
+2. Commit and push these files in the project:
+	- `.github/copilot-instructions.md`
+	- `.guardrails/config.env`
+	- `.guardrails/rules/*`
+3. Open future chats from that same repository/workspace.
+
+Why this works:
+
+- Copilot loads repository instructions from `.github/copilot-instructions.md` at the start of new chats for that project.
+- Those instructions point to `.guardrails/rules/*`, so the same policy context is re-applied each time.
+- CI enforcement remains active via `.github/workflows/guardrails.yml`.
+
+Recommended hardening:
+
+1. Protect `main`/`master` with required status check: `Guardrails`.
+2. Keep `.github/copilot-instructions.md` minimal and stable; put evolving policy details in `.guardrails/rules/*`.
+3. Set `TEST_CMD`, `LINT_CMD`, and `BUILD_CMD` in `.guardrails/config.env` for real quality gates.
+
+## Quick local validation in target repo
 
 ```bash
-bash automation/scripts/apply_to_repos.sh /repo/one /repo/two /repo/three
+cd /path/to/target-repo
+# stage files first (validator checks staged files)
+git add -A
+./.guardrails/bin/validate_guardrails.sh
 ```
 
-Windows PowerShell:
+## Configuration
 
-```powershell
-pwsh -File automation/scripts/apply_to_repos.ps1 C:\repo\one C:\repo\two C:\repo\three
-```
+Edit target repo `.guardrails/config.env`:
 
-General command for this workspace:
+- `REQUIRED_DOCS="README.md docs/ARCHITECTURE.md"`
+- `REQUIRE_DOC_UPDATE_ON_CODE_CHANGE=1`
+- `LINT_CMD="npm run lint"`
+- `TEST_CMD="pytest -q"`
+- `BUILD_CMD="npm run build"`
 
-```bash
-bash automation/scripts/apply_to_repos.sh \
-	/home/yann/Documents/Github/market_screener \
-	/home/yann/Documents/Github/doctum-trading-platform \
-	/home/yann/Documents/Github/litellm-gateway-vps \
-	/home/yann/Documents/Github/medvision-ai \
-	/home/yann/Documents/Github/market_insights \
-	/home/yann/Documents/Github/doctumconsilium-html5-css3-portfolio
-```
+## Notes
 
-## Recommended Adoption Order
-1. Start with `01-core-principles.md`.
-2. Adopt `04-testing-quality-gates.md` and `05-release-change-management.md` as merge blockers.
-3. Add repository-specific thresholds in `checklists/release-go-nogo.md`.
-4. Require all new changes to include documentation updates.
-
-## Minimum Baseline (for any project)
-- Every change has tests.
-- Critical flows are covered by end-to-end tests run frequently (PR, post-deploy, release gates).
-- Every release has rollback.
-- Every incident has technical cause + verified fix.
-- Every new behavior is documented.
-- YAML manifests stay declarative: keep application code in source files (or image builds/file-backed ConfigMaps), not inline blocks.
+- The validator currently checks **staged files**. In CI (where nothing is staged), it exits successfully with "No staged files".
+- If you want strict CI checks on changed files from the merge base, add a CI-specific validator mode in a future iteration.
