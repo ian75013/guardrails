@@ -100,4 +100,19 @@ if [[ "${WITH_COPILOT_INSTRUCTIONS}" -eq 1 ]]; then
   render_template "${KIT_ROOT}/templates/copilot-instructions.template.md" "${TARGET_REPO}/.github/copilot-instructions.md"
 fi
 
+# Install Claude Code support (default)
+render_template "${KIT_ROOT}/templates/CLAUDE.template.md" "${TARGET_REPO}/CLAUDE.md"
+
+# Install Gemini CLI + Gemini Assistant support (default)
+render_template "${KIT_ROOT}/templates/GEMINI.template.md" "${TARGET_REPO}/GEMINI.md"
+
+# Install Antigravity IDE support (default)
+mkdir -p "${TARGET_REPO}/.antigravity"
+render_template "${KIT_ROOT}/templates/workspace.template.yaml" "${TARGET_REPO}/.antigravity/workspace.yaml"
+
 echo "Guardrails Kit installation completed for: ${TARGET_REPO}"
+echo "✓ Multi-AI support enabled by default:"
+echo "  • .github/copilot-instructions.md (GitHub Copilot)"
+echo "  • CLAUDE.md (Claude Code)"
+echo "  • GEMINI.md (Gemini CLI + Gemini Assistant)"
+echo "  • .antigravity/workspace.yaml (Antigravity IDE)"

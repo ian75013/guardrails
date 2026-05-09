@@ -1,0 +1,182 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    urlcolor=blue!70!black,
+    citecolor=blue!70!black
+}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\definecolor{doctum}{rgb}{0.10,0.30,0.60}
+
+\lstset{
+  backgroundcolor=\color{codegray},
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{gray!40},
+  xleftmargin=1em,
+  framexleftmargin=0.5em
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{doctum}{\small\textbf{Doctum Consilium}}}
+\fancyhead[R]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+
+\titleformat{\section}{\large\bfseries\color{doctum}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{doctum!80}}{}{0em}{}
+
+
+\begin{document}
+
+\title{
+  \textcolor{doctum}{\Large\textbf{Guardrails Kit}} \\[0.5em]
+  \large Multi-Repo AI Assistant Policy and Engineering Standards Framework \\[0.3em]
+  \normalsize Technical Foundations and Architecture
+}
+\author{Doctum Consilium \\ \small\textit{Generated 2026-05-08}}
+\date{}
+\maketitle
+\thispagestyle{fancy}
+
+\begin{abstract}
+Canonical guardrails, templates, and agents for 13 downstream repositories. Ensures consistent code documentation, secret management, and deployment standards across GitHub Copilot, Claude Code, and Gemini CLI.
+This document covers the theoretical foundations, architectural decisions,
+and key technical concepts required to understand, contribute to, and
+maintain this repository.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Overview}
+
+Guardrails Kit is a meta-repository that defines and enforces engineering standards
+across an entire GitHub organisation. It provides:
+\begin{itemize}
+  \item Policy documents in \texttt{.guardrails/rules/}
+  \item AI assistant configuration templates (Copilot, Claude, Gemini)
+  \item A Bash/PowerShell validator script for CI enforcement
+  \item GitHub Actions workflow for automated gate checks
+  \item Installation scripts for downstream repos
+\end{itemize}
+The multi-AI design ensures that whether a contributor uses GitHub Copilot,
+Claude Code, or Gemini CLI, the same guardrails are applied.
+
+
+\section{Architecture}
+
+\begin{verbatim}
+guardrails-kit (canonical source)
+├── templates/
+│   ├── copilot-instructions.template.md  → .github/copilot-instructions.md
+│   ├── CLAUDE.template.md                → CLAUDE.md
+│   └── GEMINI.template.md                → GEMINI.md
+├── .guardrails/
+│   ├── rules/*.md         (policy documents)
+│   └── bin/validate_guardrails.sh
+└── scripts/
+    ├── install_into_repo.sh   (Ubuntu/macOS)
+    └── install_into_repo.ps1  (Windows)
+
+Downstream repos (×13)
+├── .github/copilot-instructions.md
+├── CLAUDE.md
+├── GEMINI.md
+└── .github/agents/ecr-secrets-agent.agent.md
+\end{verbatim}
+
+
+\section{Key Technical Concepts}
+\begin{itemize}[leftmargin=1.5em]
+  \item Infrastructure-as-Policy: treating engineering standards as versioned, testable artefacts rather than wiki pages.
+  \item AI assistant instruction files: \texttt{.github/copilot-instructions.md} is loaded by GitHub Copilot; \texttt{CLAUDE.md} by Claude Code; \texttt{GEMINI.md} by Gemini CLI at session start.
+  \item CI gate pattern: \texttt{validate\_guardrails.sh} checks required docs, doc-update rules, and optional lint/test/build commands as a pre-merge gate.
+  \item Template propagation: \texttt{install\_into\_repo.sh} substitutes \texttt{\{\{PROJECT\_NAME\}\}} placeholder and copies files; idempotent with \texttt{--force} flag.
+  \item Platform compatibility: all scripts provide Ubuntu (Bash), Windows (PowerShell), and macOS (zsh/bash) variants.
+\end{itemize}
+
+\section{Data Flow}
+
+guardrails-kit template update →
+\texttt{scripts/install\_into\_repo.sh /path/to/repo} →
+file copy + placeholder substitution →
+\texttt{git add + commit} in target repo →
+GitHub Actions \texttt{Guardrails} check passes.
+
+
+\section{Technology Stack}
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Component} & \textbf{Technology} \\
+\midrule
+Shell scripting & Bash 5, PowerShell 7 \\
+CI & GitHub Actions \\
+AI assistants & GitHub Copilot, Claude Code, Gemini CLI \\
+Markdown & CommonMark (instruction files) \\
+LaTeX & pdflatex (documentation) \\
+\bottomrule
+\end{tabular}
+
+
+\section{Design Decisions}
+
+\begin{itemize}
+  \item Single source of truth: all 13 repos pull standards from one place;
+    a policy change propagates to all repos in one \texttt{install} pass.
+  \item Three AI file targets: avoids vendor lock-in; contributors can use
+    whichever AI assistant they prefer without losing guardrail enforcement.
+  \item Validator checks staged files: integrates cleanly with pre-commit hooks
+    and GitHub Actions \texttt{on: pull\_request} trigger.
+\end{itemize}
+
+
+\section{Repository Structure}
+\begin{lstlisting}[language=bash,caption={Top-level directory layout}]
+guardrails-kit/
+  .github/
+    copilot-instructions.md   # GitHub Copilot guardrails
+    agents/
+      ecr-secrets-agent.agent.md  # ECR secret rotation runbook
+  CLAUDE.md                   # Claude Code guardrails
+  GEMINI.md                   # Gemini CLI guardrails
+  INFRASTRUCTURE.md           # Operational runbook
+  ROADMAP.md                  # Execution log and roadmap
+  README.md                   # Project overview
+\end{lstlisting}
+
+\section{Contributing}
+\begin{enumerate}
+  \item Read \texttt{README.md}, \texttt{INFRASTRUCTURE.md}, and \texttt{ROADMAP.md} before any task.
+  \item Follow the Code Documentation Standard: every public function must have
+    a docstring (Google-style for Python, JSDoc for TypeScript, XML for C\#).
+  \item Run the guardrails validator before committing:
+    \begin{lstlisting}[language=bash]
+git add -A && ./.guardrails/bin/validate_guardrails.sh
+    \end{lstlisting}
+  \item For deployment or destructive operations, always use a named tmux session:
+    \begin{lstlisting}[language=bash]
+tmux new-session -A -s deploy-guardrails-kit
+    \end{lstlisting}
+\end{enumerate}
+
+\end{document}

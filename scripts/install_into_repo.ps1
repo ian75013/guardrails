@@ -80,4 +80,19 @@ if ($withCopilotInstructions) {
   Render-TemplateSafely (Join-Path $KitRoot "templates\copilot-instructions.template.md") (Join-Path $TargetRepo ".github\copilot-instructions.md")
 }
 
+# Install Claude Code support (default)
+Render-TemplateSafely (Join-Path $KitRoot "templates\CLAUDE.template.md") (Join-Path $TargetRepo "CLAUDE.md")
+
+# Install Gemini CLI + Gemini Assistant support (default)
+Render-TemplateSafely (Join-Path $KitRoot "templates\GEMINI.template.md") (Join-Path $TargetRepo "GEMINI.md")
+
+# Install Antigravity IDE support (default)
+New-Item -ItemType Directory -Force (Join-Path $TargetRepo ".antigravity") | Out-Null
+Render-TemplateSafely (Join-Path $KitRoot "templates\workspace.template.yaml") (Join-Path $TargetRepo ".antigravity\workspace.yaml")
+
 Write-Host "Guardrails Kit installation completed for: $TargetRepo"
+Write-Host "✓ Multi-AI support enabled by default:"
+Write-Host "  • .github/copilot-instructions.md (GitHub Copilot)"
+Write-Host "  • CLAUDE.md (Claude Code)"
+Write-Host "  • GEMINI.md (Gemini CLI + Gemini Assistant)"
+Write-Host "  • .antigravity/workspace.yaml (Antigravity IDE)"
