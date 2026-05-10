@@ -3,16 +3,11 @@
 This file defines Claude Code execution rules for `guardrails-kit`.
 
 ## Mandatory Sources of Truth
-- `README.md`
-- `INFRASTRUCTURE.md`
-- `SKILLS.md`
-- `ROADMAP.md`
+- `README.md` (MANDATORY: Must exist, create if missing)
+- `INFRASTRUCTURE.md` (MANDATORY: Must exist, create if missing)
+- `SKILLS.md` (if present)
+- `ROADMAP.md` (MANDATORY: Must exist, create if missing)
 - `.github/copilot-instructions.md`
-- `.github/agents/guardrails-agent.agent.md`
-
-## Project Context
-guardrails-kit — canonical standards, templates, and agents for all repos.
-Changes here propagate to all 13 downstream repos.
 
 ## Execution Principles
 1. Read sources of truth before any non-trivial task.
@@ -20,7 +15,7 @@ Changes here propagate to all 13 downstream repos.
 3. Fix root causes before any workaround.
 4. Keep changes minimal, targeted, and verifiable.
 5. Update documentation when behavior changes.
-6. When modifying a template, propagate the change to all downstream repos.
+6. MISSING CORE DOCUMENTS: If README.md, INFRASTRUCTURE.md, or ROADMAP.md are missing, your VERY FIRST task is to create them before writing any code.
 
 ## Code Documentation Standard (Mandatory)
 - Every public function, class, and module MUST have a docstring in the language's canonical format:
@@ -37,36 +32,25 @@ Changes here propagate to all 13 downstream repos.
   1. `aws ecr get-login-password --region <region>` to refresh.
   2. Recreate the k8s pull secret via `kubectl delete/create secret`.
   3. Restart pods stuck in `ImagePullBackOff`.
-- Full runbook: `.github/agents/ecr-secrets-agent.agent.md`
+- Document rotation commands in `INFRASTRUCTURE.md` under Operations.
 
 ## Terminal Sessions (Mandatory for Critical Operations)
 - Always use a named tmux session for long-running, deployment, or destructive operations:
   ```bash
   tmux new-session -A -s <task-name>   # start or reattach
   # Naming: deploy-<service>, build-<tag>, k3s-ops, ecr-refresh
-  # Detach: Ctrl+B D  |  Reattach: tmux attach -t <task-name>
   ```
 - On Windows: use Windows Terminal tabs or Start-Process with file logging.
-- On macOS: same tmux convention (iTerm2 or Terminal).
 
 ## Environment Policy
 - Use a single standard environment per repo when possible.
+- Use GPU if available and compatible; otherwise CPU in the same environment.
 - Parallel environments allowed only if technically unavoidable — document reason, limits, naming, activation.
 
-## Platform Compatibility (Ubuntu + Windows + macOS)
-- Critical automation scripts must provide:
-  - Ubuntu: Bash (`.sh`)
-  - Windows: PowerShell (`.ps1`)
-  - macOS: zsh/bash (same as Ubuntu when POSIX-standard)
+## Platform Compatibility
+- Critical automation scripts must provide Ubuntu (Bash) and Windows (PowerShell) execution.
+- macOS (zsh/bash) compatibility is required when the script uses only POSIX-standard commands.
 - Any exception must be documented with an operational alternative.
-
-## Multi-AI Compatibility
-- All instructions must be valid for: GitHub Copilot, Claude Code, Gemini CLI.
-- Template files:
-  - `templates/copilot-instructions.template.md` → `.github/copilot-instructions.md`
-  - `templates/CLAUDE.template.md` → `CLAUDE.md`
-  - `templates/GEMINI.template.md` → `GEMINI.md`
-- When updating guardrails, regenerate all three target files in all downstream repos.
 
 ## Hooks (if present)
 - Preflight: `.claude/hooks/preflight.ps1` and `.claude/hooks/preflight.sh`

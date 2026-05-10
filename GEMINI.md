@@ -1,19 +1,19 @@
 # GEMINI.md
 
-This file defines execution rules for Google's AI assistants and IDEs in `Guardrails Kit`:
+This file defines execution rules for Google's AI assistants and IDEs in `guardrails-kit`:
 - **Gemini CLI** (`gemini` command)
 - **Gemini Assistant** (VS Code extension)
 - **Antigravity IDE** (Google AI development platform)
 
 ## Mandatory Sources of Truth
-- `README.md`
-- `INFRASTRUCTURE.md` (if present)
+- `README.md` (MANDATORY: Must exist, create if missing)
+- `INFRASTRUCTURE.md` (MANDATORY: Must exist, create if missing)
 - `SKILLS.md` (if present)
-- `ROADMAP.md` (if present)
+- `ROADMAP.md` (MANDATORY: Must exist, create if missing)
 - `.github/copilot-instructions.md`
 
 ## Project Context
-Guardrails Kit — Guardrails Kit is a reusable policy + validation bundle for repositories that need enforceable engineering and documentation standards.
+guardrails-kit — [Add project description here]
 
 ## Execution Principles
 1. Read sources of truth before any non-trivial task.
@@ -21,6 +21,7 @@ Guardrails Kit — Guardrails Kit is a reusable policy + validation bundle for r
 3. Fix root causes before any workaround.
 4. Keep changes minimal, targeted, and verifiable.
 5. Update documentation when behavior changes.
+6. MISSING CORE DOCUMENTS: If README.md, INFRASTRUCTURE.md, or ROADMAP.md are missing, your VERY FIRST task is to create them before writing any code.
 
 ## Code Documentation Standard (Mandatory)
 - Every public function, class, and module MUST have a docstring in the language's canonical format:
@@ -59,7 +60,7 @@ Guardrails Kit — Guardrails Kit is a reusable policy + validation bundle for r
 ## Gemini CLI Configuration
 ```bash
 # Add repository context to Gemini CLI
-gemini context add . --name Guardrails Kit
+gemini context add . --name guardrails-kit
 gemini context add README.md --priority high
 gemini context add INFRASTRUCTURE.md --priority high
 gemini context add ROADMAP.md --priority high
@@ -78,7 +79,7 @@ gemini run "Generate documentation"
 ## Antigravity IDE Integration
 Start the repository in Antigravity IDE:
 ```bash
-antigravity /path/to/Guardrails Kit
+antigravity /path/to/guardrails-kit
 ```
 
 Antigravity will automatically:

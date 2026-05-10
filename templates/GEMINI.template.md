@@ -6,10 +6,10 @@ This file defines execution rules for Google's AI assistants and IDEs in `{{PROJ
 - **Antigravity IDE** (Google AI development platform)
 
 ## Mandatory Sources of Truth
-- `README.md`
-- `INFRASTRUCTURE.md` (if present)
+- `README.md` (MANDATORY: Must exist, create if missing)
+- `INFRASTRUCTURE.md` (MANDATORY: Must exist, create if missing)
 - `SKILLS.md` (if present)
-- `ROADMAP.md` (if present)
+- `ROADMAP.md` (MANDATORY: Must exist, create if missing)
 - `.github/copilot-instructions.md`
 
 ## Project Context
@@ -21,6 +21,7 @@ This file defines execution rules for Google's AI assistants and IDEs in `{{PROJ
 3. Fix root causes before any workaround.
 4. Keep changes minimal, targeted, and verifiable.
 5. Update documentation when behavior changes.
+6. MISSING CORE DOCUMENTS: If README.md, INFRASTRUCTURE.md, or ROADMAP.md are missing, your VERY FIRST task is to create them before writing any code.
 
 ## Code Documentation Standard (Mandatory)
 - Every public function, class, and module MUST have a docstring in the language's canonical format:
